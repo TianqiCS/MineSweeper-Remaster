@@ -69,6 +69,7 @@ class Game extends React.Component {
             rows: 30,
             cols: 50,
             mines: 300,
+            remain: 300,
         };
 
     }
@@ -187,19 +188,31 @@ class Game extends React.Component {
         const isFlag = this.state.isFlag.slice();
         if (!this.state.isOpen[i]) {
             isFlag[i] = !isFlag[i];
+            let result;
             if (isFlag[i]) {
                 squares[i] = "P";
+                result = 1;
             }
             else {
                 squares[i] = null;
+                result = -1;
             }
             this.setState({
                 isFlag : isFlag,
                 history: [{
                     squares: squares,
                 }],
+                remain: this.state.remain - result,
             })
         }
+    }
+    componentDidMount() {
+        const self = this;
+        this.interval = setInterval(function() {
+            self.setState({
+                now: new Date(),
+            });
+        }, 1000);
     }
 
     render() {
@@ -209,7 +222,9 @@ class Game extends React.Component {
         if (this.state.GameOver === 1) {
             for (let i = 0; i < this.state.cols * this.state.rows; i++) {
                 if (this.state.isMine[i]) {
-                    current.squares[i] = "@";
+                    if (!this.state.isFlag[i]) {
+                        current.squares[i] = "@";
+                    }
                 }
                 else if (this.state.isFlag[i]) {
                     current.squares[i] = "X";
@@ -237,7 +252,13 @@ class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div>{this.getStatus()}</div>
-                    <ol>{/* TODO */}</ol>
+                    <div>{"Mine Remains: " + this.state.remain}</div>
+                    <div>{"Time: " + this.state.now}</div>
+                    <div>
+                        <li>{"Left Click to select"}</li>
+                        <li>{"Right Click to flag"}</li>
+                        <li>{"Middle Button to auto select"}</li>
+                    </div>
                 </div>
             </div>
         );
@@ -276,7 +297,6 @@ class Game extends React.Component {
         let isOpen = Array(this.state.cols * this.state.rows).fill(0);
         this.setState({
             isOpen: isOpen,
-            isFlag: Array(this.state.cols * this.state.rows).fill(0),
             GameOver: 0,
         });
     }
