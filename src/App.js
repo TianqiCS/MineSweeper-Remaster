@@ -59,16 +59,16 @@ class Game extends React.Component {
         super(props);
         this.state = {
             history: [{
-                squares: Array(10 * 10).fill(null),
+                squares: Array(50 * 30).fill(null),
             }],
-            isMine: Array(100).fill(0),
-            isOpen: Array(100).fill(0),
-            isFlag: Array(100).fill(0),
+            isMine: Array(1500).fill(0),
+            isOpen: Array(1500).fill(0),
+            isFlag: Array(1500).fill(0),
             xIsNext: true,
             GameOver: -1,
-            rows: 10,
-            cols: 10,
-            mines: 6,
+            rows: 30,
+            cols: 50,
+            mines: 300,
         };
 
     }
@@ -273,10 +273,10 @@ class Game extends React.Component {
                 this.state.isMine[mine] = 1;
             }
         }
-        let isOpen = Array(3 * 3).fill(0);
+        let isOpen = Array(this.state.cols * this.state.rows).fill(0);
         this.setState({
             isOpen: isOpen,
-            isFlag: Array(3 * 3).fill(0),
+            isFlag: Array(this.state.cols * this.state.rows).fill(0),
             GameOver: 0,
         });
     }
