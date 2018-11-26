@@ -8,19 +8,19 @@ self.__precacheManifest = [
     "url": "/MineSweeper-Remastered/static/js/runtime~main.e616926b.js"
   },
   {
-    "revision": "1c0c0bc434c1c6a72cbf",
-    "url": "/MineSweeper-Remastered/static/js/main.1c0c0bc4.chunk.js"
+    "revision": "57f1b34056154b3d9070",
+    "url": "/MineSweeper-Remastered/static/js/main.57f1b340.chunk.js"
   },
   {
     "revision": "0cd6058fc3c24877ba89",
     "url": "/MineSweeper-Remastered/static/js/1.0cd6058f.chunk.js"
   },
   {
-    "revision": "1c0c0bc434c1c6a72cbf",
-    "url": "/MineSweeper-Remastered/static/css/main.36bdbad9.chunk.css"
+    "revision": "57f1b34056154b3d9070",
+    "url": "/MineSweeper-Remastered/static/css/main.0c485728.chunk.css"
   },
   {
-    "revision": "75c145a041194dd64eebe71aadcd9d72",
+    "revision": "46a2353346b5e774d86ec0cf6a891bfc",
     "url": "/MineSweeper-Remastered/index.html"
   }
 ];
