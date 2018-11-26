@@ -30,3 +30,97 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+ol, ul {
+  padding-left: 30px;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 34px;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.square:hover {
+  background-color: burlywood;
+}
+
+.square[name="1"] {
+  background-color: lightgreen;
+}
+.square[name="2"] {
+  background-color: yellowgreen;
+}
+.square[name="3"] {
+  background-color: limegreen;
+}
+.square[name="4"] {
+  background-color: yellow;
+}
+.square[name="5"] {
+  background-color: orange;
+}
+.square[name="6"] {
+  background-color: darkorange;
+}
+.square[name="7"] {
+  background-color: orangered;
+}
+.square[name="8"] {
+  background-color: red;
+}
+.square[name="P"] {
+  background-color: cornflowerblue;
+}
+.square[name="@"] {
+  background-color: darkred;
+}
+
+.square[name="X"] {
+  background-color: purple;
+}
+
+.square:disabled {
+  background-color: darkseagreen;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
+}
