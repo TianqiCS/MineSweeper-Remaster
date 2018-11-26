@@ -258,6 +258,7 @@ class Game extends React.Component {
                         <li>{"Left Click to select"}</li>
                         <li>{"Right Click to flag"}</li>
                         <li>{"Middle Button to auto select"}</li>
+                        <li>{"Reload the page to restart"}</li>
                     </div>
                 </div>
             </div>
