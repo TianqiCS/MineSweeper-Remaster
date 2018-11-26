@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 
 class Square extends React.Component {
-    constructor(props) {
-      super(props);
-    }
     render() {
         return (
             <button className="square" disabled={this.props.isOpen && this.props.value === null} name={this.props.value} onMouseUp={this.props.onClick}>
@@ -75,8 +72,6 @@ class Game extends React.Component {
     }
 
     handleClick(i,e) {
-        const history = this.state.history;
-        const current = history[history.length - 1];
         if (this.state.GameOver === -1) {
             this.initilize(i);
             this.open(i);
