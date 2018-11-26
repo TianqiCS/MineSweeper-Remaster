@@ -56,17 +56,17 @@ class Game extends React.Component {
         super(props);
         this.state = {
             history: [{
-                squares: Array(50 * 30).fill(null),
+                squares: Array(this.props.cols * this.props.rows).fill(null),
             }],
-            isMine: Array(1500).fill(0),
-            isOpen: Array(1500).fill(0),
-            isFlag: Array(1500).fill(0),
+            isMine: Array(this.props.rows * this.props.cols).fill(0),
+            isOpen: Array(this.props.rows * this.props.cols).fill(0),
+            isFlag: Array(this.props.rows * this.props.cols).fill(0),
             xIsNext: true,
             GameOver: -1,
-            rows: 30,
-            cols: 50,
-            mines: 300,
-            remain: 300,
+            rows: this.props.rows,
+            cols: this.props.cols,
+            mines: this.props.mines,
+            remain: this.props.mines,
         };
 
     }
@@ -440,6 +440,114 @@ class Game extends React.Component {
     }
 }
 
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: '',
+            difficulty: 1,
+            cols: null,
+            rows: null,
+            mines: null,
+            start: false,
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({[event.target.name]: parseInt(event.target.value)});
+    }
+
+    handleSubmit(event) {
+        let cols, rows, mines, start;
+        switch (this.state.difficulty) {
+            case 1:
+                cols = 9;
+                rows = 9;
+                mines = 10;
+                start = true;
+                break;
+            case 2:
+                cols = 16;
+                rows = 16;
+                mines = 40;
+                start = true;
+                break;
+            case 3:
+                cols = 30;
+                rows = 16;
+                mines = 99;
+                start = true;
+                break;
+            case 4:
+                if (this.state.rows && this.state.cols && this.state.mines) {
+                    start = true;
+                    cols = this.state.rows;
+                    rows = this.state.cols;
+                    mines = this.state.mines;
+                }
+                break;
+            default:
+        }
+        if (start) {
+            this.setState({
+                cols: cols,
+                rows: rows,
+                mines: mines,
+                start: start,
+            });
+        }
+
+        event.preventDefault();
+    }
+
+    render() {
+        if (this.state.start) {
+            return(
+                <Game
+                    cols={this.state.cols}
+                    rows={this.state.rows}
+                    mines={this.state.mines}
+                    difficulty={this.state.difficulty}
+                />
+            )
+        }
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <div>
+                    Difficulty:
+                    <td><input type="radio" name="difficulty"
+                               value="1"
+                               checked={this.state.difficulty === 1}
+                               onChange={this.handleChange} />{"Easy"}</td>
+                    <td><input type="radio" name="difficulty"
+                               value="2"
+                               checked={this.state.difficulty === 2}
+                               onChange={this.handleChange} />{"Normal"}</td>
+                    <td><input type="radio" name="difficulty"
+                               value="3"
+                               checked={this.state.difficulty === 3}
+                               onChange={this.handleChange} />{"Hard"}</td>
+                    <td><input type="radio" name="difficulty"
+                               value="4"
+                               checked={this.state.difficulty === 4}
+                               onChange={this.handleChange} />{"Custom"}</td>
+                </div>
+                <br/>
+                <div>
+                    Cols (between 3 and 50): <input type="number" name="cols" value={this.state.cols} min="3" max="50" onChange={this.handleChange} disabled={this.state.difficulty!==4}/><br/>
+                    Rows (between 3 and 50): <input type="number" name="rows" value={this.state.rows} min="3" max="50" onChange={this.handleChange} disabled={this.state.difficulty!==4}/><br/>
+                    Quantity (between 1 and the size): <input type="number" name="mines" value={this.state.mines} onChange={this.handleChange} min="1" max={this.state.cols * this.state.rows - 1} disabled={this.state.difficulty!==4}/>
+                </div>
+                <br/>
+                <input type="submit" value="Start Game" />
+            </form>
+        );
+    }
+}
+
 // ========================================
 document.addEventListener('contextmenu', event => event.preventDefault());
-export default Game;
+export default App;

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a0b381b-2f49-4c09-9173-e0d76ed069b3" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
     </list>
@@ -20,11 +21,9 @@
       <file leaf-file-name="App.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="583">
-              <caret line="262" column="22" lean-forward="true" selection-start-line="262" selection-start-column="22" selection-end-line="262" selection-end-column="22" />
+            <state relative-caret-position="287">
+              <caret line="519" column="35" selection-start-line="519" selection-start-column="35" selection-end-line="519" selection-end-column="35" />
               <folding>
-                <element signature="e#0#41#0" expanded="true" />
-                <element signature="n#!!block;n#handleClick#0;n#Game#0" />
                 <element signature="n#!!block;n#try#0;n#Game#0" />
                 <element signature="n#!!block;n#calculate#0;n#Game#0" />
               </folding>
@@ -80,8 +79,8 @@
       <file leaf-file-name="App.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/App.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="129" lean-forward="true" selection-start-line="129" selection-end-line="129" />
+            <state relative-caret-position="-1219">
+              <caret line="44" column="14" lean-forward="true" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -201,7 +200,7 @@
       <option name="presentableId" value="Default" />
       <updated>1543124485802</updated>
       <workItem from="1543124487519" duration="28784000" />
-      <workItem from="1543206012510" duration="8965000" />
+      <workItem from="1543206012510" duration="13902000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <created>1543199881122</created>
@@ -231,14 +230,29 @@
       <option name="project" value="LOCAL" />
       <updated>1543215319742</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="some css changes to disable text selection">
+      <created>1543216128162</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1543216128162</updated>
+    </task>
+    <task id="LOCAL-00006" summary="some code changes">
+      <created>1543216253734</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1543216253734</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37749000" />
+    <option name="totallyTimeSpent" value="42686000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="10" y="20" width="1220" height="1408" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22231615" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -272,7 +286,9 @@
     <MESSAGE value="fix a little bug" />
     <MESSAGE value="some changes" />
     <MESSAGE value="some css changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="some css changes" />
+    <MESSAGE value="some css changes to disable text selection" />
+    <MESSAGE value="some code changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="some code changes" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/App.js">
@@ -280,8 +296,6 @@
         <state relative-caret-position="1330">
           <caret line="70" column="20" selection-start-line="70" selection-start-column="20" selection-end-line="70" selection-end-column="20" />
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
-            <element signature="n#!!block;n#handleClick#0;n#Game#0" />
             <element signature="n#!!block;n#try#0;n#Game#0" />
             <element signature="n#!!block;n#calculate#0;n#Game#0" />
           </folding>
@@ -332,8 +346,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="34" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/index.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -344,13 +362,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="34" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/index.css">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -358,20 +369,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/App.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="129" lean-forward="true" selection-start-line="129" selection-end-line="129" />
+        <state relative-caret-position="-1219">
+          <caret line="44" column="14" lean-forward="true" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="583">
-          <caret line="262" column="22" lean-forward="true" selection-start-line="262" selection-start-column="22" selection-end-line="262" selection-end-column="22" />
+        <state relative-caret-position="287">
+          <caret line="519" column="35" selection-start-line="519" selection-start-column="35" selection-end-line="519" selection-end-column="35" />
           <folding>
-            <element signature="e#0#41#0" expanded="true" />
-            <element signature="n#!!block;n#handleClick#0;n#Game#0" />
             <element signature="n#!!block;n#try#0;n#Game#0" />
             <element signature="n#!!block;n#calculate#0;n#Game#0" />
           </folding>
