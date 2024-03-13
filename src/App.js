@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 //import logo from './logo.svg';
 import './App.css';
+import moment from "moment";
+import {ConfigProvider, Col, InputNumber, Row, Slider, Radio, Tooltip, Button} from 'antd';
 
 /* The cell for a single slot */
 class Square extends React.Component {
@@ -67,7 +69,10 @@ class Game extends React.Component {
             cols: this.props.cols,  // the number of cols
             mines: this.props.mines,  // the number of mines
             remain: this.props.mines,  // the number of remain mines: mines - flags
+            timer: 0,  // the timer
+            explodedIndex: null,  // the index of the exploded mine
         };
+        this.timer = null;
 
     }
 
@@ -75,6 +80,12 @@ class Game extends React.Component {
     handleClick(i,e) {
         if (this.state.GameOver === -1) {  // if the game has not begun, we initialize the board and open the square
             this.initialize(i);
+            this.timer = setInterval(()=>{
+                this.setState({
+                    timer: this.state.timer + 10,
+                });
+
+            }, 10);
         }
         else if (!this.state.GameOver && e.nativeEvent.which === 1) {  // it is a left click, we open the square
           this.open(i)
@@ -105,23 +116,46 @@ class Game extends React.Component {
             for (let i = 0; i < this.state.cols * this.state.rows; i++) {
                 if (this.state.isMine[i]) {
                     if (!this.state.isFlag[i]) {  // these mines are not flagged
-                        squares[i] = "@";
+                        squares[i] = "💣";
                     }
                 }
                 else if (this.state.isFlag[i]) {  // these squares are wrongly flagged
-                    squares[i] = "X";
+                    squares[i] = "❌";
+                }
+                if (i === this.state.explodedIndex) {  // the exploded mine
+                    squares[i] = "💥";
                 }
             }
         }
         if (this.state.GameOver === 2) {  // marks all mines as flagged when win
             for (let i = 0; i < this.state.cols * this.state.rows; i++) {
                 if (this.state.isMine[i]) {
-                    squares[i] = "P";
+                    squares[i] = "🚩";
                 }
             }
         }
+
+        const timerDisplay = moment.duration(this.state.timer).asSeconds().toFixed(2);
+
         return (
             <div className="game">
+                <Row>
+                    <Col flex="auto" style={{'float': 'left'}}>
+                        <h3>{"💣 " + this.state.remain}</h3>
+                    </Col>
+                    <Col flex="auto">
+                        <Tooltip title={
+                            <div>
+                                <li>{"Left Button - OPEN"}</li>
+                                <li>{"Right Button - FLAG"}</li>
+                                <li>{"Middle Button - AUTO"}</li>
+                            </div>
+                        }><h3 style={{'textAlign': 'center'}}>{this.getStatus()}</h3></Tooltip>
+                    </Col>
+                    <Col flex="auto">
+                        <h3 style={{'float': 'right'}}>⏱️ {timerDisplay}</h3>
+                    </Col>
+                </Row>
                 <div className="game-board">
                     <Board
                         squares={squares}
@@ -129,21 +163,15 @@ class Game extends React.Component {
                         isFlag={this.state.isFlag}
                         isMine={this.state.isMine.slice().fill(0)}
                         settings={{rows: this.state.rows, cols: this.state.cols}}
-                        onClick={(i,e) => this.handleClick(i,e)}
+                        onClick={(i, e) => this.handleClick(i, e)}
                     />
                 </div>
-                <div className="game-info">
-                    <div>{this.getStatus()}</div>
-                    <div>{"Mine Remains: " + this.state.remain}</div>
-                    <div>{"Time: " + this.state.now}</div>
-                    <div>
-                        <li>{"Left Click to select"}</li>
-                        <li>{"Right Click to flag"}</li>
-                        <li>{"Middle Button to auto select"}</li>
-                        <li>{"Reload the page to restart"}</li>
-                    </div>
-                    <button onClick={Game.restart}>Restart</button>
-                </div>
+                <br/>
+                <input style={{
+                    //set to center of the line
+                    display: "flex",
+                    margin: "auto",
+                }} type="submit" value="Restart" onClick={Game.restart}/>
             </div>
         );
     }
@@ -187,6 +215,8 @@ class Game extends React.Component {
             isMine: isMine,
             isOpen: isOpen,
             GameOver: 0,
+            explodedIndex: null,
+            timer: 0,
         },() => {  // make sure we have set state first (Asynchronous !)
             this.open(index);
         });
@@ -196,7 +226,11 @@ class Game extends React.Component {
     open(index) {
         if (!this.state.isOpen[index] && !this.state.isFlag[index]) {  // we don't open opened or flagged squares
             if (this.state.isMine[index]) {  // unluckily, the square is a mine, better luck next time
+                this.setState({
+                    explodedIndex: index,
+                })
                 this.gameover(1);
+                clearInterval(this.timer);
             }
             else {
                 this.calculate(index);  // calculate the value and may open other squares recursively
@@ -209,7 +243,20 @@ class Game extends React.Component {
                     }
                 }
                 if (opened === this.state.cols * this.state.rows - this.state.mines) {
-                  this.gameover(2)
+                    this.gameover(2);
+                    clearInterval(this.timer);
+                    // Save the game to local storage
+                    let data = JSON.parse(localStorage.getItem('leaderboard')) || [];
+                    data.push({
+                      time: new Date().toLocaleString(),
+                      difficulty: this.props.difficulty,
+                      timer: moment.duration(this.state.timer).asSeconds().toFixed(2),
+                    });
+                    // sort the data by timer
+                    data.sort((a, b) => {
+                      return a.timer - b.timer;
+                    });
+                    localStorage.setItem('leaderboard', JSON.stringify(data));
                 }
             }
         }
@@ -431,7 +478,7 @@ class Game extends React.Component {
             // calculate remains
             let result;
             if (isFlag[i]) {
-                squares[i] = "P";
+                squares[i] = "🚩";
                 result = 1;
             }
             else {
@@ -457,22 +504,25 @@ class Game extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
+        let data = JSON.parse(localStorage.getItem('leaderboard')) || [];
         this.state = {
             difficulty: 1,  // difficulty : 1 easy, 2 normal, 3 hard, 4 custom
-            cols: null,  // number of columns
-            rows: null,  // number or rows
-            mines: null,  // number of mines
+            cols: 3,  // number of columns
+            rows: 3,  // number or rows
+            mines: 1,  // number of mines
             start: false,  // is the game started
+            leaderboard: data,
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
+}
 
     // handle form input changes
     handleChange(event) {
         this.setState({[event.target.name]: parseInt(event.target.value)});
     }
+
 
     // handle form submit
     handleSubmit(event) {
@@ -523,50 +573,188 @@ class App extends React.Component {
     render() {
         if (this.state.start) {  // render the game if we have start the game
             return(
-                <div>
+                <ConfigProvider
+                    theme={{
+                        token: {
+                            // Seed Token
+                            colorPrimary: "#fa8c16",
+                            colorInfo: "#fa8c16",
+                            borderRadius: 4,
+                            colorBgBase: "#ffdab9"
+                        },
+                    }}
+                >
                     <Game
                         cols={this.state.cols}
                         rows={this.state.rows}
                         mines={this.state.mines}
                         difficulty={this.state.difficulty}
                     />
-                </div>
+                </ConfigProvider>
             )
         }
         // render the setting form before start the game
         return (
+            <ConfigProvider
+                theme={{
+                    token: {
+                        // Seed Token
+                        colorPrimary: "#fa8c16",
+                        colorInfo: "#fa8c16",
+                        borderRadius: 4,
+                        colorBgBase: "#ffdab9"
+                    },
+                }}
+            >
             <form onSubmit={this.handleSubmit}>
-                <div>
-                    Difficulty:
-                    <input type="radio" name="difficulty"
-                               value="1"
-                               checked={this.state.difficulty === 1}
-                               onChange={this.handleChange} />{"Easy"}
-                    <input type="radio" name="difficulty"
-                               value="2"
-                               checked={this.state.difficulty === 2}
-                               onChange={this.handleChange} />{"Normal"}
-                    <input type="radio" name="difficulty"
-                               value="3"
-                               checked={this.state.difficulty === 3}
-                               onChange={this.handleChange} />{"Hard"}
-                    <input type="radio" name="difficulty"
-                               value="4"
-                               checked={this.state.difficulty === 4}
-                               onChange={this.handleChange} />{"Custom"}
+                <div style={{
+                    fontSize: "1.5em",
+                }}>
+                    Difficulty&nbsp;&nbsp;&nbsp;
+                    <Radio.Group size={"large"} defaultValue={1} value={this.state.difficulty} buttonStyle="solid"
+                                 style={{borderRadius: "1px"}}
+                                 onChange={(e) => {this.setState({difficulty: e.target.value})} // set the difficulty based on the radio button
+                    }>
+                        <Radio.Button value={1}>😇 Easy</Radio.Button>
+                        <Radio.Button value={2}>😏 Normal</Radio.Button>
+                        <Radio.Button value={3}>😮 Hard</Radio.Button>
+                        <Radio.Button value={4}>😋 Custom</Radio.Button>
+                    </Radio.Group>
                 </div>
                 <br/>
-                <div>
-                    Cols (between 3 and 50): <input type="number" name="cols" value={this.state.cols} min="3" max="50" onChange={this.handleChange} disabled={this.state.difficulty!==4}/><br/>
-                    Rows (between 3 and 50): <input type="number" name="rows" value={this.state.rows} min="3" max="50" onChange={this.handleChange} disabled={this.state.difficulty!==4}/><br/>
-                    Quantity (between 1 and the size): <input type="number" name="mines" value={this.state.mines} onChange={this.handleChange} min="1" max={this.state.cols * this.state.rows - 1} disabled={this.state.difficulty!==4}/>
+                <div hidden={this.state.difficulty!==4}>
+                    <Row>
+                        <Col span={6} style={{fontSize: "1.5em"}}>Rows &nbsp;&nbsp;&nbsp;</Col>
+                        <Col span={12}>
+                            <Slider
+                                disabled={this.state.difficulty!==4}
+                                min={3}
+                                max={50}
+                                onChange={(value) => this.setState({cols: value})}
+                                value={this.state.cols}
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <InputNumber
+                                disabled={this.state.difficulty!==4}
+                                min={3}
+                                max={50}
+                                style={{
+                                    margin: '0 16px',
+                                }}
+                                onChange={(value) => this.setState({cols: value})}
+                                value={this.state.cols}
+                            />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={6} style={{fontSize: "1.5em"}}>Cols &nbsp;&nbsp;&nbsp;&nbsp;</Col>
+                        <Col span={12}>
+                            <Slider
+                                disabled={this.state.difficulty!==4}
+                                min={3}
+                                max={50}
+                                onChange={(value) => this.setState({rows: value})}
+                                value={this.state.rows}
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <InputNumber
+                                disabled={this.state.difficulty!==4}
+                                min={3}
+                                max={50}
+                                style={{
+                                    margin: '0 16px',
+                                }}
+                                onChange={(value) => this.setState({rows: value})}
+                                value={this.state.rows}
+                            />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={6} style={{fontSize: "1.5em"}}>Mines &nbsp;&nbsp;</Col>
+                        <Col span={12}>
+                            <Slider
+                                disabled={this.state.difficulty!==4}
+                                min={3}
+                                max={50}
+                                onChange={(value) => this.setState({mines: value})}
+                                value={this.state.mines}
+                            />
+                        </Col>
+                        <Col span={4}>
+                            <InputNumber
+                                disabled={this.state.difficulty!==4}
+                                min={1}
+                                max={this.state.cols * this.state.rows - 1}
+                                style={{
+                                    margin: '0 16px',
+                                }}
+                                onChange={(value) => this.setState({mines: value})}
+                                value={this.state.mines}
+                            />
+                        </Col>
+                    </Row>
                 </div>
                 <br/>
-                <input type="submit" value="Start Game" />
+
+                <input style={{
+                    //set to center of the line
+                    display: "flex",
+                    margin: "auto",
+                }} type="submit" value="Start Game" />
+
+                <Leaderboard data={this.state.leaderboard}/>
             </form>
+            </ConfigProvider>
         );
     }
 }
+
+// create a leaderboard component with local storage, data will be datetime, difficulty, and timer
+// use antd row and col to make the leaderboard looks better
+class Leaderboard extends React.Component {
+
+    render() {
+        if (this.props.data.length === 0) {
+            return null;
+        }
+
+        return (
+            <div style={{'textAlign': 'center'}}>
+                <h2>Leaderboard</h2>
+                <div>
+                    <Row>
+                        <Col span={8}><h3>DateTime</h3></Col>
+                        <Col span={8}><h3>Difficulty</h3></Col>
+                        <Col span={8}><h3>Timer</h3></Col>
+                    </Row>
+                    {this.props.data.map((item, index) => {
+                        return (
+                            <Row key={index}>
+                                <Col span={8}>{moment(item.time).fromNow()}</Col>
+                                <Col
+                                    span={8}>{item.difficulty === 1 ? "Easy" : item.difficulty === 2 ? "Normal" : item.difficulty === 3 ? "Hard" : "Custom"}</Col>
+                                <Col span={8}>{item.timer}</Col>
+                            </Row>
+                        )
+                    })}
+                </div>
+                <br/>
+                <Button type="primary" style={{
+                    //set to center of the line
+                    display: "flex",
+                    margin: "auto",
+                }} onClick={()=>{
+                    localStorage.setItem('leaderboard', JSON.stringify([]));
+                    window.location.reload();
+                }}>Clear</Button>
+
+            </div>
+        )
+    }
+}
+
 
 // ========================================
 document.addEventListener('contextmenu', event => event.preventDefault());  // prevent right click menu
